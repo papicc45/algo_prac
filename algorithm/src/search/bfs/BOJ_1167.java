@@ -9,7 +9,7 @@ public class BOJ_1167 {
     static int n;
     static ArrayList<TreeNode>[] list;
     static boolean[] visited;
-    static int result = Integer.MIN_VALUE;
+    static int[] nodes;
     public static void main(String[] args) throws IOException {
 //        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         Scanner sc = new Scanner(System.in);
@@ -28,31 +28,37 @@ public class BOJ_1167 {
                 else {
                     int value = sc.nextInt();
                     list[node].add(new TreeNode(vertex, value));
-                    list[vertex].add(new TreeNode(node, value));
                 }
             }
         }
 
-
-        visited = new boolean[n+1];
         BFS(1);
+        int max = 1;
+        for(int i=2 ; i<=n ; i++) {
+            if(nodes[i] > max) {
+                max = i;
+            }
+        }
 
-        System.out.println(result);
-
+        BFS(max);
+        Arrays.sort(nodes);
+        System.out.println(nodes[n]);
     }
     public static void BFS(int index) {
         Queue<TreeNode> queue = new LinkedList<>();
+        nodes = new int[n+1];
+        visited = new boolean[n+1];
         visited[index] = true;
         queue.add(new TreeNode(index, 0));
 
         while(!queue.isEmpty()) {
             TreeNode temp = queue.poll();
-            result = Math.max(result, temp.value);
 
             for(TreeNode t : list[temp.vertex]) {
                 if(!visited[t.vertex]) {
                     visited[t.vertex] = true;
                     queue.add(new TreeNode(t.vertex, temp.value + t.value));
+                    nodes[t.vertex] = nodes[temp.vertex] +  t.value;
                 }
             }
         }
