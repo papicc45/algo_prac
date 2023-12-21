@@ -3,59 +3,62 @@ package greedy;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
 
-public class BOJ_1781 {
+public class BOJ_2109 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int n = Integer.parseInt(br.readLine());
-
-        ArrayList<Ramen> ramens = new ArrayList<>();
+        ArrayList<Lecture> list = new ArrayList<>();
         PriorityQueue<Integer> queue = new PriorityQueue<>();
 
         for(int i=0 ; i<n ; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
-            ramens.add(new Ramen(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
+            int pay = Integer.parseInt(st.nextToken());
+            int deadline = Integer.parseInt(st.nextToken());
+            list.add(new Lecture(deadline, pay));
         }
-        Collections.sort(ramens);
 
-        for(Ramen ramen : ramens) {
+        Collections.sort(list);
+
+        for(Lecture lecture : list) {
             int size = queue.size();
 
-            if(size < ramen.deadline) {
-                queue.add(ramen.cnt);
-            } else if(size == ramen.deadline) {
+            if(size < lecture.deadline) {
+                queue.add(lecture.pay);
+            } else if(size == lecture.deadline) {
                 int temp = queue.peek();
 
-                if(temp < ramen.cnt) {
+                if(temp < lecture.pay) {
                     queue.poll();
-                    queue.add(ramen.cnt);
+                    queue.add(lecture.pay);
                 }
             }
         }
-
         int result = 0;
         while(!queue.isEmpty()) {
             result += queue.poll();
         }
-
         System.out.println(result);
     }
 }
 
-class Ramen implements Comparable<Ramen> {
+class Lecture implements Comparable<Lecture> {
     int deadline;
-    int cnt;
+    int pay;
 
-    public Ramen(int deadline, int cnt) {
+    public Lecture(int deadline, int pay) {
         this.deadline = deadline;
-        this.cnt = cnt;
+        this.pay = pay;
     }
 
-    public int compareTo(Ramen o) {
+    public int compareTo(Lecture o) {
         if(o.deadline == this.deadline) {
-            return o.cnt - this.cnt;
+            return o.pay - this.pay;
         } else {
             return this.deadline - o.deadline;
         }
