@@ -19,57 +19,66 @@ public class BOJ_2457 {
             int endMonth = Integer.parseInt(st.nextToken());
             int endDay = Integer.parseInt(st.nextToken());
 
-            flowers.add(new Flower(startMonth, startDay, endMonth, endDay));
+            flowers.add(new Flower(startMonth * 100 + startDay, endMonth * 100 + endDay));
         }
+
         Collections.sort(flowers);
 
-        for(Flower flower : flowers) {
-            System.out.println(flower.startMonth + " " + flower.startDay + " " + flower.endMonth + " " + flower.endDay);
+        int min = 301;
+        int max = 1201;
+        int index = 0;
+        int cnt = 0;
+        int feature = 0;
+        while(min < max) {
+
+            boolean check = false;
+            for(int i =index ; i<n ; i++) {
+                Flower temp = flowers.get(i);
+                if(temp.startDay > min)
+                    break;
+
+                if(temp.endDay > feature) {
+                    check = true;
+                    feature = temp.endDay;
+                    index = i + 1;
+                }
+            }
+
+            if(check) {
+                min = feature;
+                cnt++;
+            } else {
+                break;
+            }
         }
 
-        if(!check(flowers.get(0).startMonth, flowers.get(0).startDay)) {
+        if(feature < max) {
             System.out.println(0);
-            return;;
+        } else {
+            System.out.println(cnt);
         }
-        PriorityQueue<Flower> queue = new PriorityQueue<>();
-        queue.add(flowers.get(0));
-        for(Flower flower : flowers) {
-
-            if(queue.size() != 0) {
-                Flower temp = queue.peek();
-                if(flower.startMonth)
-            }
-        }
-    }
-    static boolean check(int startMonth, int startDay) {
-        if(startMonth >= 3) {
-            if(startDay >= 2) {
-                return false;
-            }
-        }
-        return true;
     }
 }
 
-class Flower implements Comparable<Flower>{
-    int startMonth;
+class Flower implements Comparable<Flower> {
     int startDay;
-    int endMonth;
     int endDay;
 
-    public Flower(int startMonth, int startDay, int endMonth, int endDay) {
-        this.startMonth = startMonth;
+    Flower(int startDay, int endDay) {
         this.startDay = startDay;
-        this.endMonth = endMonth;
         this.endDay = endDay;
     }
 
     @Override
     public int compareTo(Flower o) {
-        if(this.startMonth == o.startMonth) {
-            return this.startDay - o.startDay;
+        if(this.startDay == o.startDay) {
+            if(this.endDay == o.endDay) {
+                return 0;
+            } else {
+                return o.endDay - this.endDay;
+            }
         } else {
-            return this.startMonth - o.startMonth;
+            return this.startDay - o.startDay;
         }
     }
 }
