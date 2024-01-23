@@ -2,7 +2,7 @@ package dynamicprogramming;
 
 import java.util.Scanner;
 
-public class BOj_1463 {
+public class BOJ_1463 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
