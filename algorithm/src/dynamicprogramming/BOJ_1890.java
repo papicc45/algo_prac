@@ -19,7 +19,22 @@ public class BOJ_1890 {
             }
         }
 
-        int[][] dp = new int[n+1][n+1];
+        long[][] dp = new long[n+1][n+1];
+        dp[1][1] = 1;
+        for(int i=1 ; i<=n ; i++) {
+            for(int j=1 ; j<=n ; j++) {
+                int len = arr[i][j];
+
+                if(len == 0)
+                    break;
+
+                if(i + len <= n)
+                    dp[i+len][j] += dp[i][j];
+                if(j + len <= n)
+                    dp[i][j+len] += dp[i][j];
+            }
+        }
+        System.out.println(dp[n][n]);
 
     }
 }
