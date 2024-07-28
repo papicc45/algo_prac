@@ -1,6 +1,7 @@
 import com.sun.source.tree.MethodInvocationTree;
 
 import javax.naming.directory.DirContext;
+import javax.swing.*;
 import javax.swing.plaf.synth.SynthRadioButtonMenuItemUI;
 import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.io.BufferedReader;
@@ -16,8 +17,9 @@ import java.util.zip.CheckedInputStream;
 
 public class Main {
     public static void main(String[] args) {
-        char ch  ='A';
-        System.out.println(ch - 'A');
-    }
 
+    }
 }
+
+
+
