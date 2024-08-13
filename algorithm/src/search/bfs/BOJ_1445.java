@@ -14,8 +14,6 @@ public class BOJ_1445 {
     static boolean[][] visited;
     static int n, m;
     static int xs, ys, xe, ye;
-    static int[][] arr1;
-    static int[][] arr2;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -24,8 +22,6 @@ public class BOJ_1445 {
 
         map = new char[n][m];
         visited = new boolean[n][m];
-        arr1 = new int[n][m];
-        arr2 = new int[n][m];
 
         for (int i = 0; i < n; i++) {
             char[] arr = br.readLine().toCharArray();
@@ -40,13 +36,19 @@ public class BOJ_1445 {
                 }
             }
         }
-
         for(int i=0 ; i<n ; i++) {
-            Arrays.fill(arr1[i], Integer.MAX_VALUE);
-            Arrays.fill(arr2[i], Integer.MAX_VALUE);
+            for(int j=0 ; j<m ; j++) {
+                if(map[i][j] == 'g') {
+                    for(int k=0 ; k<4 ; k++) {
+                        int nx = i + dx[k];
+                        int ny = j + dy[k];
+                        if(!check(nx, ny)) continue;
+                        if(map[nx][ny] == 'S' || map[nx][ny] == 'F' || map[nx][ny] == 'g') continue;;
+                        map[nx][ny] = 'G';
+                    }
+                }
+            }
         }
-        arr1[xs][ys] = 0;
-        arr2[xs][ys] = 0;
         int[] result = bfs();
         System.out.println(result[0] + " " + result[1]);
     }
@@ -76,19 +78,6 @@ public class BOJ_1445 {
             if(visited[tx][ty]) continue;
             visited[tx][ty] = true;
 
-            int ng2 = 0;
-            int ng1 = 0;
-            if(map[tx][ty] == '.') {
-                for(int i=0 ; i<4 ; i++) {
-                    int nx = tx + dx[i];
-                    int ny = tx + dy[i];
-
-                    if(check(nx, ny) && map[nx][ny] == 'g') ng2++;
-                }
-            } else if(map[tx][ty] == 'g') {
-                ng1++;
-            }
-
             for(int i=0 ; i<4 ; i++) {
                 int nx = tx + dx[i];
                 int ny = ty + dy[i];
@@ -96,8 +85,14 @@ public class BOJ_1445 {
                 if(!check(nx, ny)) continue;
                 if(visited[nx][ny]) continue;
 
-
-                queue.add(new Road(nx, ny, g1 + ng1, g2 + ng2));
+                int ng1 = g1;
+                int ng2 = g2;
+                if(map[nx][ny] == 'G') {
+                    ng2++;
+                } else if(map[nx][ny] == 'g') {
+                    ng1++;
+                }
+                queue.add(new Road(nx, ny, ng1, ng2));
             }
         }
         return answer;
