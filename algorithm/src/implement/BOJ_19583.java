@@ -20,6 +20,7 @@ public class BOJ_19583 {
         Set<String> out = new HashSet<>();
         Set<String> names = new HashSet<>();
         String str = null;
+
         while ((str = br.readLine()) != null) {
             String[] s = str.split(" ");
             String t = s[0];
