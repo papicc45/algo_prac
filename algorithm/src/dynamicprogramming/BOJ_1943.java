@@ -10,10 +10,9 @@ public class BOJ_1943 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String str;
-        while (!(str = br.readLine()).equals("")) {
-            int n = Integer.parseInt(str);
-
+        int t = 0;
+        while (++t <= 3) {
+            int n = Integer.parseInt(br.readLine());
             boolean[] dp = new boolean[100001];
             int sum = 0;
             int[] costs = new int[n];
@@ -26,13 +25,17 @@ public class BOJ_1943 {
                 costs[i] = cost;
                 cnts[i] = cnt;
             }
+
+            if(sum % 2 != 0) {
+                System.out.println("0");
+                continue;
+            }
             dp[0] = true;
-            for(int i=0 ; i<=100000 ; i++) {
-                for(int j=0 ; j<n ; j++) {
-                    if(i - costs[j] >= 0 && dp[i - costs[j]]) {
-                        if(cnts[j] > 0) {
-                            dp[i] = true;
-                            cnts[j]--;
+            for(int i=0 ; i<n ; i++) {
+                for(int j=sum/2 ; j>=costs[i] ; j--) {
+                    if(dp[j - costs[i]]) {
+                        for(int k=1 ; k<=cnts[i] ; k++) {
+                            dp[j-costs[i] + costs[i] * k] = true;
                         }
                     }
                 }
