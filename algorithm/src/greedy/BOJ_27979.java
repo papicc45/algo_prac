@@ -49,8 +49,5 @@ public class BOJ_27979 {
         }
 
         System.out.println(cnt);
-        /*
-        2 7 6 4 10
-         */
     }
 }
