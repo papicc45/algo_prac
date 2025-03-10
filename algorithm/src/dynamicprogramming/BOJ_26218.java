@@ -40,6 +40,7 @@ public class BOJ_26218 {
 
         for(int i=1 ; i<=b ; i++) {
             for(int j=0 ; j<n ; j++) {
+                add[i][j] = add[i-1][j];
 //                double d1 = i - works[j].c;
                 if(i - works[j].c < 0) continue;
                 double d2 = add[i-works[j].c][j] + works[j].a;
