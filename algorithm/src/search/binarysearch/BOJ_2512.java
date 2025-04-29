@@ -22,24 +22,20 @@ public class BOJ_2512 {
         int m = Integer.parseInt(br.readLine());
 
         while (left <= right) {
-            int mid = (left + right) / 2;
+            int mid = left + (right - left) / 2;
 
-            long sum = 0;
+            int sum = 0;
             for(int i=0 ; i<n ; i++) {
-                if(arr[i] > mid) {
-                    sum += mid;
-                } else {
-                    sum += arr[i];
-                }
+                sum += Math.min(mid, arr[i]);
             }
 
-            if(sum > m) {
-                right = mid - 1;
-            } else {
+            if(sum <= m) {
                 left = mid + 1;
+            } else {
+                right = mid - 1;
             }
-
         }
+
         System.out.println(right);
     }
 }

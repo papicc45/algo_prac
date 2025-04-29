@@ -11,70 +11,65 @@ public class BOJ_21276 {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
 
+        HashMap<String, ArrayList<String>> hm = new HashMap<>();
+        HashMap<String, ArrayList<String>> direct = new HashMap<>();
+        HashMap<String, Integer> degree = new HashMap<>();
         StringTokenizer st = new StringTokenizer(br.readLine());
-        LinkedHashMap<String, Integer> strMap = new LinkedHashMap<>();
-        HashMap<Integer, String> intMap = new HashMap<>();
-//        List<Person> list = new ArrayList<>();
-        List<Integer>[] list = new ArrayList[n];
-        List<String>[] answer = new ArrayList[n];
-        for(int i=0 ; i<n ; i++) {
-            list[i] = new ArrayList<>();
-            answer[i] = new ArrayList<>();
-        }
-
-        for(int i=0 ; i<n ; i++) {
-            String name = st.nextToken();
-            strMap.put(name, i);
-            intMap.put(i, name);
+        for(int i = 0; i < n; i++){
+            String p = st.nextToken();
+            hm.put(p, new ArrayList<>());
+            direct.put(p, new ArrayList<>());
+            degree.put(p, 0);
         }
 
         int m = Integer.parseInt(br.readLine());
-        int[] degree = new int[n];
-        for(int i=0 ; i<m ; i++) {
+        for(int i = 0; i < m; i++){
             st = new StringTokenizer(br.readLine());
-            String p1 = st.nextToken();
-            String p2 = st.nextToken();
-
-            list[strMap.get(p1)].add(strMap.get(p2));
-            degree[strMap.get(p2)]++;
+            String c = st.nextToken();
+            String p = st.nextToken();
+            hm.get(p).add(c);
+            degree.put(c, degree.getOrDefault(c, 0) + 1);
         }
-        Queue<Integer> queue = new LinkedList<>();
-        for(int i=0 ; i<n ; i++) {
-            if(degree[i] == 0)
-                queue.add(i);
-        }
-        List<String> top = new ArrayList<>();
-        int cnt = 0;
-        while(!queue.isEmpty()) {
-            int temp = queue.poll();
-
-            if(list[temp].size() == 0) {
-                top.add(intMap.get(temp));
-                cnt++;
-            }
-
-            for(Integer next : list[temp]) {
-                degree[next]--;
-
-                answer[next].add(intMap.get(temp));
-
-                if(degree[next] == 0)
-                    queue.add(next);
+        PriorityQueue<String> pq = new PriorityQueue<>();
+        Queue<String> queue  = new LinkedList<>();
+        for(String p : degree.keySet()){
+            if(degree.get(p) == 0) {
+                pq.add(p);
+                queue.add(p);
             }
         }
-        Collections.sort(top);
+
         StringBuilder sb = new StringBuilder();
-        sb.append(cnt).append("\n");
+        sb.append(pq.size()).append("\n");
+        while(!pq.isEmpty()){
+            String p = pq.poll();
+            sb.append(p).append(" ");
+        }
+        sb.append("\n");
 
-        for(int i=0 ; i<n ; i++) {
-            System.out.print(intMap.get(i) + " ");
-            System.out.print(answer[i].size() + " ");
-            for(String p : answer[i]) {
-                System.out.print(p + " ");
+        while (!queue.isEmpty()) {
+            String p = queue.poll();
+
+            for(String c : hm.get(p)){
+                degree.put(c, degree.getOrDefault(c, 0) - 1);
+
+                if(degree.get(c) == 0) {
+                    queue.add(c);
+                    direct.get(p).add(c);
+                }
             }
-            System.out.println();
         }
 
-
+        ArrayList<String> list = new ArrayList<>(direct.keySet());
+        Collections.sort(list);
+        for(String p : list){
+            sb.append(p).append(" ").append(direct.get(p).size()).append(" ");
+            Collections.sort(direct.get(p));
+            for(String c : direct.get(p)) {
+                sb.append(c).append(" ");
+            }
+            sb.append("\n");
+        }
+        System.out.println(sb.toString());
     }
 }
