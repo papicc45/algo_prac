@@ -19,12 +19,11 @@ public class BOJ_21608 {
         int sn = (int)Math.pow(n, 2) + 1;
         list = new ArrayList[sn];
         map = new int[n][n];
-
         for(int i=0 ; i<sn ; i++) {
             list[i] = new ArrayList<>();
         }
 
-        for(int i=1 ; i<=n ; i++) {
+        for(int i=1 ; i<sn ; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
             int c = Integer.parseInt(st.nextToken());
             queue.add(c);
@@ -34,13 +33,14 @@ public class BOJ_21608 {
         }
 
         while (!queue.isEmpty()) {
-            Queue<int[]> emptyList = new LinkedList<>();
+            ArrayList<int[]> emptyList = new ArrayList<>();
             for(int i=0 ; i<n ; i++) {
                 for(int j=0 ; j<n ; j++) {
                     if(map[i][j] == 0)
                         emptyList.add(new int[] {i, j});
                 }
             }
+
 
             int tempStudent = queue.poll();
             ArrayList<int[]> secondList = second(tempStudent, emptyList);
@@ -79,8 +79,8 @@ public class BOJ_21608 {
 
                 int cnt = 0;
                 for(int k=0 ; k<4 ; k++) {
-                    int nx = i + dx[i];
-                    int ny = j + dy[i];
+                    int nx = i + dx[k];
+                    int ny = j + dy[k];
                     if(range(nx, ny) && list[temp].contains(map[nx][ny])) {
                         cnt++;
                     }
@@ -93,12 +93,6 @@ public class BOJ_21608 {
             }
         }
 
-        for(int i=0 ; i<n ; i++) {
-            for(int j=0 ; j<n ; j++) {
-                System.out.print(map[i][j] + " ");
-            }
-            System.out.println();
-        }
         System.out.println(result);
     }
     private static ArrayList<int[]> adjEmptyCheck(ArrayList<int[]> list) {
@@ -129,11 +123,10 @@ public class BOJ_21608 {
 
         return ans;
     }
-    private static ArrayList<int[]> second(int student, Queue<int[]> emptyList) {
+    private static ArrayList<int[]> second(int student, ArrayList<int[]> emptyList) {
         int[][] cnt = new int[n][n];
         int max = 0;
-        while (!emptyList.isEmpty()) {
-            int[] temp = emptyList.poll();
+        for(int[] temp : emptyList) {
             int tx = temp[0];
             int ty = temp[1];
 
@@ -149,11 +142,9 @@ public class BOJ_21608 {
         }
 
         ArrayList<int[]> ans = new ArrayList<>();
-        for(int i=0 ; i<n ; i++) {
-            for(int j=0 ; j<n ; j++) {
-                if(cnt[i][j] == max) {
-                    ans.add(new int[] {i, j});
-                }
+        for(int[] temp : emptyList) {
+            if(cnt[temp[0]][temp[1]] == max) {
+                ans.add(new int[] {temp[0], temp[1]});
             }
         }
 
